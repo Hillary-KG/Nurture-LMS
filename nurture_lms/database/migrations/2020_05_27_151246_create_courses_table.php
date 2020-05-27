@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCoursesTable extends Migration
 {
     /**
-     * Run the migrations.['name', 'description', 'cost', 'user_id', 'duration', 'status'];
+     * Run the migrations.
      *
      * @return void
      */
@@ -16,11 +16,21 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('course_name');
-            $table->('description');
+            $table->string('description');
             $table->decimal('cost');
             $table->double('duration');
-            $table->string('status');
+            $table->boolean('status')->default(true);
+            $table->unsignedBigInteger('tutor_id');
+            $table->unsignedBigInteger('category_id');
             $table->timestamps();
+
+            $table->foreign('tutor_id')
+                ->references('id')
+                ->on('users');
+
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('course_categories');
         });
     }
 
