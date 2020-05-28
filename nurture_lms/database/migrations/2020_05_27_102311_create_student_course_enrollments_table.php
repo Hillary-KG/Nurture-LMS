@@ -19,6 +19,7 @@ class CreateStudentCourseEnrollmentsTable extends Migration
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('student_id');
             $table->string('status')->default("pending");
+            $table->string('transaction_id');
 
             $table->foreign('student_id')
                 ->references('id')
@@ -27,6 +28,8 @@ class CreateStudentCourseEnrollmentsTable extends Migration
             $table->foreign('course_id')
                 ->references('id')
                 ->on('courses');
+
+
             $table->timestamps();
         });
     }

@@ -55,7 +55,7 @@ class EnrollmentController extends Controller
     {
         try {
             $user = auth()->user();
-            $enrollments = $user->courses();
+            $enrollments = $user->enrollments();
             if ($enrollments->isEmpty()) {
                 return response()->json([
                     'success' => true,
@@ -94,7 +94,7 @@ class EnrollmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in fetching: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 
@@ -123,7 +123,7 @@ class EnrollmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in updating: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 
@@ -152,7 +152,7 @@ class EnrollmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in fetching: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 }

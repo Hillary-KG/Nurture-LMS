@@ -36,7 +36,7 @@ Route::group([
     Route::put('update/{id}', 'CourseController@update');
     Route::get('index', 'CourseController@getAll');
     Route::get('getOne/{id}', 'CourseController@getOne');
-    Route::delete('delete/{id}', 'CourseController@getOne');
+    Route::delete('delete/{id}', 'CourseController@delete');
 });
 
 Route::group([
@@ -47,19 +47,31 @@ Route::group([
     Route::put('update/{id}', 'CourseCategoryController@update');
     Route::get('index', 'CourseCategoryController@getAll');
     Route::get('getOne/{id}', 'CourseCategoryController@getOne');
-    Route::delete('delete/{id}', 'CourseCategoryController@getOne');
+    Route::delete('delete/{id}', 'CourseCategoryController@delete');
 });
 
 Route::group([
     'middleware' => 'api',
     'prefix' => 'enroll'
 ], function () {
-    Route::post('create', 'CourseCategoryController@addEnrollment');
-    Route::put('update/{id}', 'CourseCategoryController@update');
-    Route::get('index', 'CourseCategoryController@getAll');
-    Route::get('getOne/{id}', 'CourseCategoryController@getOne');
-    Route::delete('delete/{id}', 'CourseCategoryController@getOne');
+    Route::post('create', 'EnrollmentController@addEnrollment');
+    Route::put('update/{id}', 'EnrollmentController@update');
+    Route::get('index', 'EnrollmentController@getAll');
+    Route::get('getOne/{id}', 'EnrollmentController@getOne');
+    Route::delete('delete/{id}', 'EnrollmentController@delete');
 });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'purchases'
+], function () {
+    Route::post('create', 'CoursePurchaseController@store');
+    Route::put('update/{id}', 'CoursePurchaseController@update');
+    Route::get('index', 'CoursePurchaseController@index');
+    Route::get('getOne/{id}', 'CoursePurchaseController@show');
+    Route::delete('delete/{id}', 'CoursePurchaseController@destroy');
+});
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

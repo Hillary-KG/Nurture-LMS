@@ -93,7 +93,7 @@ class CourseCategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in fetching: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 
@@ -122,7 +122,7 @@ class CourseCategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in updating: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 
@@ -151,7 +151,7 @@ class CourseCategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error occured in fetching: ' . $ex->getMessage()
-            ], 400);
+            ], 500);
         }
     }
 }
