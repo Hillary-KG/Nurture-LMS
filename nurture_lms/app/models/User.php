@@ -68,4 +68,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany('App\models\StudentCourseEnrollment');
     }
+
+    public function reviews()
+    {
+        return $this->morphMany('App\models\Reviews', 'reviewable');
+    }
+
+    public function review()
+    {
+        return $this->hasMany('App\models\Reviews');
+    }
 }

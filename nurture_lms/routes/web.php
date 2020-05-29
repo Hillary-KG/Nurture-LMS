@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('', 'WebUIController@home');
+Route::get('registerStudent', 'WebUIController@registerStudent');
+Route::get('registerAdmin', 'WebUIController@registerAdmin');
+Route::get('registerTutor', 'WebUIController@registerTutor');
+Route::get('login', 'WebUIController@login')->name('login');

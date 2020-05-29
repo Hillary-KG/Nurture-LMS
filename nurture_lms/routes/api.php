@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group([
 
-    'middleware' => 'api',
+    // 'middleware' => 'api',
     'prefix' => 'auth'
 
 ], function ($router) {
@@ -72,7 +72,16 @@ Route::group([
     Route::delete('delete/{id}', 'CoursePurchaseController@destroy');
 });
 
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'reviews'
+], function () {
+    Route::post('add', 'ReviewsController@store');
 });
+
+
+
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
