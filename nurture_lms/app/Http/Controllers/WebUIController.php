@@ -10,7 +10,7 @@ class WebUIController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'registerAdmin', 'registerTutor', 'registerStudent']]);
+        $this->middleware('auth:api', ['except' => ['login', 'home', 'registerAdmin', 'registerTutor', 'registerStudent']]);
         $this->user = auth()->user();
     }
 

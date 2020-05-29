@@ -151,8 +151,7 @@
         </div>
         <div class="category-items">
             <div class="row">
-                @if($courses != null)
-                    @foreach ($courses as $course)
+                
                     <!-- Single Item -->
                     <div class="col-md-4 col-sm-6 equal-height">
                         <div class="item mariner">
@@ -162,7 +161,7 @@
                                         <i class="flaticon-algorithm"></i>
                                     </div>
                                     <div class="info">
-                                        <h5>{{$course->course_name}}</h5>
+                                        <h5></h5>
                                         <!-- <p>
                                                 Current enrolled <strong>1278</strong>
                                             </p>
@@ -173,8 +172,7 @@
                         </div>
                     </div>
                     <!-- End Single Item -->
-                    @endforeach
-                @endif
+                   
             </div>
         </div>
     </div>
