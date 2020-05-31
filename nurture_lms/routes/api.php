@@ -37,6 +37,7 @@ Route::group([
     Route::get('index', 'CourseController@getAll');
     Route::get('getOne/{id}', 'CourseController@getOne');
     Route::delete('delete/{id}', 'CourseController@delete');
+    Route::get('search', 'CourseController@search');
 });
 
 Route::group([

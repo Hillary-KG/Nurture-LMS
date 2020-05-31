@@ -22,6 +22,8 @@ class CreateCoursesTable extends Migration
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('tutor_id');
             $table->unsignedBigInteger('category_id');
+            $table->string('course_video');
+            $table->string('thumbnail');
             $table->timestamps();
 
             $table->foreign('tutor_id')

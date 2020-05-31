@@ -1,30 +1,63 @@
 @extends('master')
 @section('content')
-<!-- Start Banner 
-    ============================================= -->
-    <div class="banner-area shadow bg-fixed dark text-center text-light" style="background-image: url(assets/img/banner/11.jpg);">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="box-table">
-                        <div class="box-cell">
-                            <div class="content search-content">
-                                <h2>Start Learning Today</h2>
-                                <!-- <ul>
-                                    <li><i class="fas fa-drafting-compass"></i> Architecture</li>
-                                    <li><i class="fas fa-book"></i> Education</li>
-                                    <li><i class="fas fa-globe-asia"></i> Geography</li>
-                                </ul> -->
-                                <div class="col-md-8 col-md-offset-2">
-                                    <div class="row">
-                                        <form action="#">
-                                            <input type="text" placeholder="Enter course name" class="form-control" name="text">
-                                            <button type="submit">
-                                                <i class="ti-search"></i> Search 
-                                            </button>  
-                                        </form>
-                                    </div>
-                                </div>
+<div class="popular-courses-area weekly-top-items default-padding bottom-less">
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-lg-2 col-md-2 text-center">
+                    <div class="navbar flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
+                        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+                    </div>
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">...</div>
+                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
+                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+                    </div>
+                </div> -->
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <ul id="menuTab" class="nav nav-pills" style="border-width: 10px;background-color: #e8ece7;padding: 10px">
+                        <!-- <li class="nav-item" style="padding-right: 20%;">
+                            <a href="#purchases" class="nav-link active" style="background: #3a44ae;">Purchases</a>
+                        </li> -->
+                        <li class="nav-item" style="padding-right: 20%;">
+                            <a href="#courses" class="nav-link" style="background: #3a44ae;">Courses</a>
+                        </li>
+                        <!-- <li class="nav-item" style="padding-right: 20%;">
+                            <a href="#categories" class="nav-link" style="background: #3a44ae;">Course Categories</a>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+                <div class="bs-example">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="courses">
+                            <h4 class="mt-2">Courses</h4>
+                            <div>
+                                <hr>
+                                <table class="table" id="coursesTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Course Name</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Learn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($enrollments as $course)
+                                        <tr>
+                                            <td>{{ $course->course->course_name }}</td>
+                                            <td>{{ $course->course->category->categoty }}</td>
+                                            <td><a class="btn btn-theme effect btn-sm" id="{{ $course->course->id }}" href="{{ url('/course') }}/{{ $course->course->id }}" target="_blank">watch</a></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -32,72 +65,18 @@
             </div>
         </div>
     </div>
-    <!-- End Banner -->
+</div>
+@endsection('content')
+@section('scripts')
+<script>
+    // $(document).ready(function(){ 
 
-    <!-- Start Categories 
-    ============================================= -->
-    <div class="category-area default-padding">
-        <div class="container">
-            <div class="row">
-                <div class="site-heading text-center">
-                    <div class="col-md-8 col-md-offset-2">
-                        <h2>My Courses</h2>
-                        <p>
-                             
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="category-items">
-                <div class="row">
-                    @foreach ($courses as $course)
-                    <!-- Single Item -->
-                    <div class="col-md-4 col-sm-6 equal-height">
-                        <div class="item mariner">
-                            <a href="#">
-                                <div class="item-box">
-                                    <div class="icon">
-                                        <i class="flaticon-algorithm"></i>
-                                    </div>
-                                    <div class="info">
-                                        <h5>{{$course->course_name}}</h5>
-                                        <!-- <p>
-                                            Current enrolled <strong>1278</strong>
-                                        </p>
-                                        <span>28 Courses</span> -->
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- End Single Item -->
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Categories -->
-
-    <!-- Start Advisor 
-    ============================================= -->
-    
-    <!-- End Advisor -->
-
-    <!-- Start Event 
-    ============================================= -->
-    
-    <!-- End Event -->
-
-    
-
-   
-    <!-- Start Blog 
-    ============================================= -->
-    
-    <!-- End Blog -->
-
-    <!-- Start Newsletter 
-    ============================================= -->
-   
-    <!-- End Newsletter -->
-    @endsection('content')
+    // });
+    $(function() {
+        $("#menuTab a").click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+    });
+</script>
+@endsection('scripts')

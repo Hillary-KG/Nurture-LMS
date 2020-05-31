@@ -27,4 +27,9 @@ class Course extends Model
     {
         return $this->morphMany('App\models\Reviews', 'reviewable');
     }
+
+    public function purchases()
+    {
+        return $this->hasMany('App\models\CoursePurchase');
+    }
 }

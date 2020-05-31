@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('type');//0=admin, 1=tutor, 2=student
             $table->string('gender')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

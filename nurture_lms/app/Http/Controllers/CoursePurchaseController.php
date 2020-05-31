@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CoursePurchase;
+use App\models\Course;
 use App\models\CoursePurchase as ModelsCoursePurchase;
+use App\models\StudentCourseEnrollment;
+use App\models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Validator;
@@ -13,6 +16,7 @@ class CoursePurchaseController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', []);
+        $this->user = auth()->user();
     }
     /**
      * Display a listing of the resource.
@@ -63,7 +67,7 @@ class CoursePurchaseController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'trans_id' => 'required|string',
-                'enrollment'=>'exists:student_course_enrollment,id'
+                'course_id'=>'exists:courses,id'
             ]);
 
             if ($validator->fails()) {
@@ -72,10 +76,16 @@ class CoursePurchaseController extends Controller
                     'message' => $validator->errors()
                 ], 401);
             }
+            $clean_phone = preg_replace("/^(0|\+254)/", '254', $request->phone_no);
+            
+            $student = $this->user;
+            $course = Course::find($request->course_id);
 
             $transaction = new ModelsCoursePurchase();
-            $transaction->trans_id = $request->category;
-            $transaction->enrollment()->associate($request->enrollment);
+            $transaction->trans_id = $request->trans_id;
+            $transaction->phone_no = $request->phone_no;
+            $transaction->course()->associate($course);
+            $transaction->user()->associate($student);
                       
             if (!$transaction->save()) {
                 return response()->json([
@@ -134,6 +144,67 @@ class CoursePurchaseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try {
+            $validator = Validator::make($request->all(), [
+                'action' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()
+                ], 401);
+            }
+            $purchase = ModelsCoursePurchase::find($id);
+            $student = $purchase->user;
+            $enrollment = new StudentCourseEnrollment();
+
+            $course = $purchase->course;
+            if ($request->action === "approve") {
+                $purchase->status = "approved";
+                error_log("course >>>".$course->course_name);
+                $enrollment->user_id = $student->id;
+                $enrollment->course_id = $course->id;
+
+                // $student->enrollments()->associate($enrollment);
+                // $course->enrollment()->save($enrollment);
+                // error_log("")
+                
+                
+                if (!$enrollment->save()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "could not create enrollment"
+                    ], 400);
+                }
+                // if (!$course->save()) {
+                //     return response()->json([
+                //         'success' => false,
+                //         'message' => "could not create enrollment"
+                //     ], 400);
+                // }
+                
+            } else {
+                $purchase->status = "rejected";
+            }
+                      
+            if (!$purchase->save()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "could not update purchase"
+                ], 400);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "purchase updated successfully",
+                'data' => $purchase
+            ], 201);
+        } catch (Exception $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => "failed ".$ex->getMessage(),
+            ], 500);
+        }
         
     }
 

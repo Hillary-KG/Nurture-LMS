@@ -17,8 +17,8 @@ class StudentCourseEnrollment extends Model
         return $this->belongsTo('App\models\Course');
     }
 
-    public function purchase()
-    {
-        return $this->hasMany('App\models\CoursePurchase');
-    }
+    // public function purchase()
+    // {
+    //     return $this->hasMany('App\models\CoursePurchase');
+    // }
 }

@@ -16,10 +16,19 @@ class CreateCoursePurchasesTable extends Migration
         Schema::create('course_purchases', function (Blueprint $table) {
             $table->id();
             $table->string('trans_id');
-            $table->unsignedBigInteger('enrollment_id');
+            $table->string('phone_no');
+            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('status')->default('pending');
             $table->timestamps();
+            
 
-            $table->foreign('enrollment_id')
+
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users');
+
+            $table->foreign('course_id')
                 ->references('id')
                 ->on('courses');
         });

@@ -34,8 +34,15 @@ $(function () {
                     expires: $expTime
                 });
                 console.log("success!!!!!!!!!!!!!!!!");
+                if (response.user_type == 0) {
+                    location.href = '/admin';
+                } else if (response.user_type == 1) {
+                    location.href = '/tutor';
+                }else{
+                    location.href = '/student';
+                }
 
-                location.href = '/';
+                // location.href = '/';
             },
             error: function (jqXHR) {
                 $("#ajax_loader").css('display', 'none');

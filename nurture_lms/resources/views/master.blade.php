@@ -49,7 +49,7 @@
 
     <!-- Start Header Top 
     ============================================= -->
-   @include('partials.top_nav')
+   
     <!-- End Header Top -->
     
     @include('partials.header')
@@ -66,7 +66,7 @@
     ============================================= -->
     <script src="{{ asset ('js/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ asset ('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset ('js/bootstrap.min.js') }}"></script>
+    <!-- <script src="{{ asset ('js/bootstrap.min.js') }}"></script> -->
     <script src="{{ asset ('js/equal-height.min.js') }}"></script>
     <script src="{{ asset ('js/jquery.appear.js') }}"></script>
     <script src="{{ asset ('js/jquery.easing.min.js') }}"></script>

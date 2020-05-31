@@ -6,13 +6,15 @@ use App\models\Course;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class CourseController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', []);
+        $this->middleware('auth:api', ['except'=>['search']]);
     }
     public function createCourse(Request $request)
     {
@@ -21,7 +23,9 @@ class CourseController extends Controller
                 'course_name' => 'required|string',
                 'description' => 'required|string',
                 'cost' => 'required|numeric|between:0,999999.99',
-                'duration' => 'required|numeric'
+                'duration' => 'required|numeric',
+                'course_video' => 'required|mimes:mimes:webp,svg,mpeg,ogg,mp4,webm,flv,m3u8,ts,3gp,mov,avi,wmv,image/gif,qt|max:200000',
+                'thumbnail' => 'required|mimes:jpeg,bmp,png,gif'
             ]);
 
             if ($validator->fails()) {
@@ -33,6 +37,43 @@ class CourseController extends Controller
 
             $course = new Course();
             $user = auth()->user();
+
+            $uniqueName = (int) microtime(); // For unique naming vaideo/poster
+            $videoSrc = "";
+            $thumbnailSrc = "";
+
+            $file = $request->file('course_video');
+            // Upload video
+            $destinationPath = 'uploads/videos';
+            $fileName = $uniqueName . '.' . $file->getClientOriginalExtension();
+            $uploadSuccess = $file->move($destinationPath, $fileName);
+            $videoSrc = '/' . $destinationPath . '/' . $fileName;
+            $course->course_video = $videoSrc;
+
+            $thumbnail = $request->file('thumbnail');
+            // Upload poster
+            $destinationPath = 'uploads/images';
+            $fileName = "thumbnail" . $uniqueName . '.' . $thumbnail->getClientOriginalExtension();
+            $uploadSuccess = $thumbnail->move($destinationPath, $fileName);
+            $thumbnailSrc = '/' . $destinationPath . '/' . $fileName;
+
+            $course->thumbnail = $thumbnailSrc;
+
+            // $thumbnail = $request->file('thumbnail')->store('images');
+            // // dd($thumbnail);
+
+            // // $filename = $thumbnail->getClientOriginalName();
+            // // $path = 'uploads/courses';
+            // // $upload_path = Storage::putFileAs($path, $thumbnail, $filename);
+            // $course->thumbnail = $thumbnail;
+
+            // $course_vid = $request->file('course_video')->store('videos');
+            // // dd($course_vid);
+            // // $vid_name = $course_vid->getClientOriginalName();
+            // // $vid_path = Storage::putFileAs($path, $course_vid, $vid_name);
+            // $course->course_video = $course_vid;
+
+
             $course->course_name = $request->course_name;
             $course->description = $request->description;
             $course->cost = $request->cost;
@@ -54,7 +95,7 @@ class CourseController extends Controller
         } catch (Exception $ex) {
             return response()->json([
                 'success' => false,
-                'message' => "failed ".$ex->getMessage(),
+                'message' => "failed " . $ex->getMessage(),
             ], 500);
         }
     }
@@ -72,12 +113,12 @@ class CourseController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "courses found",
-                'data'=>$courses
+                'data' => $courses
             ], 200);
-        } catch (Exception $ex){
+        } catch (Exception $ex) {
             return response()->json([
                 'success' => false,
-                'message' => "failed ".$ex->getMessage(),
+                'message' => "failed " . $ex->getMessage(),
             ], 500);
         }
     }
@@ -96,6 +137,33 @@ class CourseController extends Controller
                 'success' => true,
                 'message' => "course found",
                 'data' => $course,
+            ], 200);
+        } catch (Exception $ex) {
+            return response()->json([
+                'success' => false,
+                'message' => 'error occured in fetching: ' . $ex->getMessage()
+            ], 500);
+        }
+    }
+    
+    public function search(Request $request)
+    {
+        try {
+            error_log("input ".$request->course);
+            
+            $courses = DB::table('courses')->where('course_name', 'like', '%'.$request->course.'%')->get();
+            error_log("input ".$request->course);
+                           
+            if ($courses->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'courses not found'
+                ], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "courses found",
+                'data' => $courses,
             ], 200);
         } catch (Exception $ex) {
             return response()->json([
