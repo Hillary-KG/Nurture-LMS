@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class WebUIController extends Controller
 {
+    protected $user;
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['tutors', 'contact', 'about', 'login', 'home', 'registerAdmin', 'registerTutor', 'registerStudent']]);

@@ -14,7 +14,7 @@ class CourseController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except'=>['search']]);
+        $this->middleware('auth:api', ['except' => ['search']]);
     }
     public function createCourse(Request $request)
     {
@@ -24,7 +24,7 @@ class CourseController extends Controller
                 'description' => 'required|string',
                 'cost' => 'required|numeric|between:0,999999.99',
                 'duration' => 'required|numeric',
-                'course_video' => 'required|mimes:mimes:webp,svg,mpeg,ogg,mp4,webm,flv,m3u8,ts,3gp,mov,avi,wmv,image/gif,qt|max:200000',
+                'course_video' => 'required|mimes:webp,svg,mpeg,ogg,mp4,webm,flv,m3u8,ts,3gp,mov,avi,wmv,image/gif,qt|max:200000',
                 'thumbnail' => 'required|mimes:jpeg,bmp,png,gif'
             ]);
 
@@ -126,7 +126,10 @@ class CourseController extends Controller
     public function getOne($id)
     {
         try {
-            $course = Course::find($id);
+            $course = Course::where('id', $id)
+                ->withCount('enrollment')
+                ->withCount('reviews')
+                ->first();
             if (!$course) {
                 return response()->json([
                     'success' => false,
@@ -137,6 +140,7 @@ class CourseController extends Controller
                 'success' => true,
                 'message' => "course found",
                 'data' => $course,
+                // 'cat'=>$course->category->categoty
             ], 200);
         } catch (Exception $ex) {
             return response()->json([
@@ -145,15 +149,15 @@ class CourseController extends Controller
             ], 500);
         }
     }
-    
+
     public function search(Request $request)
     {
         try {
-            error_log("input ".$request->course);
-            
-            $courses = DB::table('courses')->where('course_name', 'like', '%'.$request->course.'%')->get();
-            error_log("input ".$request->course);
-                           
+            error_log("input " . $request->course);
+
+            $courses = DB::table('courses')->where('course_name', 'like', '%' . $request->course . '%')->get();
+            error_log("input " . $request->course);
+
             if ($courses->isEmpty()) {
                 return response()->json([
                     'success' => false,
